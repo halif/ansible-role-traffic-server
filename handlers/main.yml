@@ -1,0 +1,6 @@
+---
+- name: Restart Apache Traffic Server
+  ansible.builtin.service:
+    name: "{{ traffic_server_service_name }}"
+    state: restarted
+  become: true
