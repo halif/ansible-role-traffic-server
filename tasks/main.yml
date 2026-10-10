@@ -1,0 +1,21 @@
+---
+- name: Validate supported operating system
+  ansible.builtin.assert:
+    that:
+      - ansible_distribution == "Ubuntu"
+      - ansible_distribution_release in traffic_server_supported_ubuntu_releases
+    fail_msg: >-
+      Unsupported operating system:
+      {{ ansible_distribution }} {{ ansible_distribution_version }}.
+      Supported Ubuntu releases:
+      {{ traffic_server_supported_ubuntu_releases | join(', ') }}.
+
+- name: Install Apache Traffic Server
+  ansible.builtin.include_tasks: install.yml
+
+- name: Configure Apache Traffic Server
+  ansible.builtin.include_tasks: configure.yml
+  when: traffic_server_manage_config | bool
+
+- name: Manage Apache Traffic Server service
+  ansible.builtin.include_tasks: service.yml

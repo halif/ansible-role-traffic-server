@@ -1,0 +1,14 @@
+---
+traffic_server_package_name: trafficserver
+traffic_server_service_name: trafficserver
+
+traffic_server_supported_ubuntu_releases:
+  - jammy
+  - noble
+
+traffic_server_manage_config: true
+traffic_server_config_file: /etc/trafficserver/records.config
+traffic_server_http_port: 8080
+
+traffic_server_service_enabled: true
+traffic_server_service_state: started
