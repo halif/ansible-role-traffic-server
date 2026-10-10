@@ -18,4 +18,4 @@
   when: traffic_server_manage_config | bool
 
 - name: Manage Apache Traffic Server service
-  ansible.builtin.include_tasks: service.yml
+  ansible.builtin.include_tasks:

@@ -1,0 +1,7 @@
+---
+- name: Manage Apache Traffic Server service
+  ansible.builtin.service:
+    name: "{{ traffic_server_service_name }}"
+    enabled: "{{ traffic_server_service_enabled }}"
+    state: "{{ traffic_server_service_state }}"
+  become: true
