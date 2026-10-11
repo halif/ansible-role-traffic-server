@@ -33,10 +33,10 @@ jobs:
           pip install ansible-core ansible-lint yamllint
 
       - name: Run yamllint
-        run: yamllint -c .yamllint .
+        run: yamllint -c .config/yamllint.yml .
 
       - name: Run ansible-lint
-        run: ansible-lint -c .ansible-lint .
+        run: ansible-lint -c .ansible-lint.yml .
 
   molecule:
     name: Molecule - Ubuntu 22.04
