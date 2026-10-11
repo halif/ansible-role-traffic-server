@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: traffic-server
+  role_name: traffic_server
   author: halif
   namespace: halif
   description: Install and configure Apache Traffic Server on Ubuntu.

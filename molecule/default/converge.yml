@@ -4,4 +4,4 @@
   become: true
 
   roles:
-    - role: halif.traffic-server
+    - role: halif.traffic_server
