@@ -1,0 +1,45 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Gather package facts
+      ansible.builtin.package_facts:
+        manager: apt
+
+    - name: Verify Traffic Server package
+      ansible.builtin.assert:
+        that:
+          - "'trafficserver' in ansible_facts.packages"
+        fail_msg: "Apache Traffic Server package is not installed"
+
+    - name: Check Traffic Server configuration
+      ansible.builtin.stat:
+        path: /etc/trafficserver/records.config
+      register: traffic_server_config
+
+    - name: Verify Traffic Server configuration
+      ansible.builtin.assert:
+        that:
+          - traffic_server_config.stat.exists
+          - traffic_server_config.stat.isreg
+
+    - name: Gather service facts
+      ansible.builtin.service_facts:
+
+    - name: Verify Traffic Server service
+      ansible.builtin.assert:
+        that:
+          - "'trafficserver.service' in ansible_facts.services"
+          - ansible_facts.services['trafficserver.service'].state == 'running'
+        fail_msg: "Apache Traffic Server service is not running"
+
+    - name: Verify configured HTTP port
+      ansible.builtin.command:
+        argv:
+          - grep
+          - -E
+          - '^[[:space:]]*CONFIG[[:space:]]+proxy\.config\.http\.server_ports[[:space:]]+STRING[[:space:]]+8080([[:space:]]|$)'
+          - /etc/trafficserver/records.config
+      changed_when: false
