@@ -36,7 +36,7 @@ jobs:
         run: yamllint -c .config/yamllint.yml .
 
       - name: Run ansible-lint
-        run: ansible-lint -c ansible-lint.yml .
+        run: ansible-lint
 
   molecule:
     name: Molecule - Ubuntu 22.04
