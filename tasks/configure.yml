@@ -1,25 +1,25 @@
 ---
-- name: Check Traffic Server configuration
+- name: Check Traffic Server configuration directory
   ansible.builtin.stat:
-    path: "{{ traffic_server_config_file }}"
-  register: traffic_server_config_stat
+    path: "{{ traffic_server_config_file | dirname }}"
+  register: traffic_server_config_dir_stat
 
-- name: Verify Traffic Server configuration exists
+- name: Verify Traffic Server configuration directory exists
   ansible.builtin.assert:
     that:
-      - traffic_server_config_stat.stat.exists
-      - traffic_server_config_stat.stat.isreg
+      - traffic_server_config_dir_stat.stat.exists
+      - traffic_server_config_dir_stat.stat.isdir
     fail_msg: >-
-      Traffic Server configuration file was not found:
-      {{ traffic_server_config_file }}
+      Traffic Server configuration directory was not found:
+      {{ traffic_server_config_file | dirname }}
 
-- name: Configure Traffic Server HTTP listener
-  ansible.builtin.lineinfile:
-    path: "{{ traffic_server_config_file }}"
-    regexp: '^\s*CONFIG\s+proxy\.config\.http\.server_ports\s+STRING\b'
-    line: >-
-      CONFIG proxy.config.http.server_ports STRING
-      {{ traffic_server_http_port }}
+- name: Configure Traffic Server
+  ansible.builtin.template:
+    src: records.config.j2
+    dest: "{{ traffic_server_config_file }}"
+    owner: root
+    group: root
+    mode: "0644"
     backup: true
   notify: Restart Apache Traffic Server
   become: true
