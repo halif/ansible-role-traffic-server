@@ -4,4 +4,4 @@
   become: true
 
   roles:
-    - role: traffic_server
+    - role: traffic-server
