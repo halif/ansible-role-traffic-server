@@ -2,9 +2,10 @@
 galaxy_info:
   role_name: traffic-server
   author: halif
+  namespace: halif
   description: Install and configure Apache Traffic Server on Ubuntu.
   license: MIT
-  min_ansible_version: "2.15"
+  min_ansible_version: "2.14"
   platforms:
     - name: Ubuntu
       versions:
