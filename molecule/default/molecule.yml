@@ -9,9 +9,16 @@ platforms:
   - name: traffic-server-ubuntu
     image: geerlingguy/docker-ubuntu2204-ansible:latest
     command: /lib/systemd/systemd
+    privileged: true
+    # Отключаем AppArmor, который душит systemd в GitHub Actions
+    security_opts:
+      - apparmor:unconfined
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    privileged: true
+    # Systemd 249+ в Ubuntu 22.04 требует чистый /run для старта
+    tmpfs:
+      - /run
+      - /run/lock
 
 provisioner:
   name: ansible
