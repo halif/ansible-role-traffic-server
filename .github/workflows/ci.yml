@@ -69,6 +69,6 @@ jobs:
           docker run --rm --entrypoint /bin/bash \
             geerlingguy/docker-ubuntu2204-ansible \
             -c 'id; ls -ld /tmp; touch /tmp/test-write && rm /tmp/test-write'
-      
+
       - name: Run Molecule tests
         run: molecule test
