@@ -63,12 +63,13 @@ jobs:
           mkdir -p ~/.ansible/roles
           ln -s "$GITHUB_WORKSPACE" ~/.ansible/roles/traffic_server
 
-      - name: Debug Molecule Docker container
+      - name: Debug Molecule container permissions
         run: |
           docker ps -a
-          docker run --rm --entrypoint /bin/bash \
-            geerlingguy/docker-ubuntu2204-ansible \
-            -c 'id; ls -ld /tmp; touch /tmp/test-write && rm /tmp/test-write'
+          docker inspect "$(docker ps -aq | head -n 1)" \
+            --format 'User={{.Config.User}} ReadonlyRootfs={{.HostConfig.ReadonlyRootfs}}'
+          molecule login -h traffic-server-ubuntu -- \
+            /bin/sh -c 'id; ls -ld /tmp; touch /tmp/test-write; echo write_test_exit=$?'
 
       - name: Run Molecule tests
         run: molecule test
