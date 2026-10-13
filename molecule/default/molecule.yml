@@ -7,10 +7,12 @@ driver:
 
 platforms:
   - name: traffic-server-ubuntu
-    image: geerlingguy/docker-ubuntu2204-ansible
-    pre_build_image: true
+    image: geerlingguy/docker-ubuntu2204-ansible:latest
+    command: /lib/systemd/systemd
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns: host
     privileged: true
-    command: ""
 
 provisioner:
   name: ansible
