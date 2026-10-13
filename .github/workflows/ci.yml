@@ -63,5 +63,12 @@ jobs:
           mkdir -p ~/.ansible/roles
           ln -s "$GITHUB_WORKSPACE" ~/.ansible/roles/traffic_server
 
+      - name: Debug Molecule Docker container
+        run: |
+          docker ps -a
+          docker run --rm --entrypoint /bin/bash \
+            geerlingguy/docker-ubuntu2204-ansible \
+            -c 'id; ls -ld /tmp; touch /tmp/test-write && rm /tmp/test-write'
+      
       - name: Run Molecule tests
         run: molecule test
