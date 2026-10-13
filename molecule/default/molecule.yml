@@ -18,7 +18,7 @@ provisioner:
   config_options:
     defaults:
       interpreter_python: auto_silent
-      remote_tmp: /tmp/.ansible/tmp
+      remote_tmp: /tmp
 
   inventory:
     host_vars:
