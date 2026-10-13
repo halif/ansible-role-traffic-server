@@ -65,7 +65,7 @@ jobs:
 
       - name: Create Molecule containers
         run: molecule create
-      
+
       - name: Debug Molecule container permissions
         run: |
           docker ps -a
