@@ -69,10 +69,13 @@ jobs:
       - name: Debug Molecule container permissions
         run: |
           docker ps -a
+          
+          # Инспектируем контейнер (теперь ID точно есть)
           docker inspect "$(docker ps -aq | head -n 1)" \
             --format 'User={{.Config.User}} ReadonlyRootfs={{.HostConfig.ReadonlyRootfs}}'
-          molecule login -h traffic-server-ubuntu -- \
-            /bin/sh -c 'id; ls -ld /tmp; touch /tmp/test-write; echo write_test_exit=$?'
+          
+          # Запускаем команды проверки напрямую через Docker
+          docker exec traffic-server-ubuntu /bin/sh -c 'id; ls -ld /tmp; touch /tmp/test-write; echo write_test_exit=$?'
 
       - name: Run Molecule tests
         run: molecule test
