@@ -66,13 +66,14 @@ jobs:
       - name: Create Molecule containers
         run: molecule create
 
-      - name: Debug Molecule container permissions
+      - name: Debug Molecule container startup
+        if: always()
         run: |
           docker ps -a
+          docker logs traffic-server-ubuntu || true
           docker inspect traffic-server-ubuntu \
-            --format 'User={{.Config.User}} ReadonlyRootfs={{.HostConfig.ReadonlyRootfs}} PID={{.State.Pid}} Status={{.State.Status}}'
-          docker exec traffic-server-ubuntu /bin/sh -c \
-            'id; ls -ld /tmp; touch /tmp/test-write && rm /tmp/test-write; systemctl is-system-running || true'
+            --format 'ExitCode={{.State.ExitCode}} Error={{.State.Error}} Status={{.State.Status}}' \
+            || true
 
       - name: Run Molecule tests
         run: molecule test
