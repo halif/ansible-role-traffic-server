@@ -69,9 +69,10 @@ jobs:
       - name: Debug Molecule container permissions
         run: |
           docker ps -a
-          docker inspect "$(docker ps -aq | head -n 1)" \
-            --format 'User={{.Config.User}} ReadonlyRootfs={{.HostConfig.ReadonlyRootfs}}'
-          docker exec traffic-server-ubuntu /bin/sh -c 'id; ls -ld /tmp; touch /tmp/test-write; echo write_test_exit=$?'
+          docker inspect traffic-server-ubuntu \
+            --format 'User={{.Config.User}} ReadonlyRootfs={{.HostConfig.ReadonlyRootfs}} PID={{.State.Pid}} Status={{.State.Status}}'
+          docker exec traffic-server-ubuntu /bin/sh -c \
+            'id; ls -ld /tmp; touch /tmp/test-write && rm /tmp/test-write; systemctl is-system-running || true'
 
       - name: Run Molecule tests
         run: molecule test
